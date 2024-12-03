@@ -1,16 +1,36 @@
 <script setup>
 import Header from "./components/Header.vue";
+import { useRoute } from 'vue-router'
+import { onMounted, ref, watch } from 'vue'
+
+const route = useRoute()
+const currentRouteName = ref("")
+onMounted(() => {
+    currentRouteName.value = route.name
+})
+watch(route, (to) => {
+    currentRouteName.value = to.name
+    console.log(currentRouteName.value);
+
+})
+
 </script>
 
 <template>
-    <div class="container">
-        <Header/>
-
-        <router-view v-slot:="{ Component }">
+    <div class="h-100">
+        <Header :currentRouteName="currentRouteName"/>
+        <br>
+        <div class="container text-center">
+            <Transition name="fade" mode="out-in">
+                <h1 :key="currentRouteName" class="display-2">{{ currentRouteName }}</h1>
+            </Transition>
+            <hr>
+            <router-view v-slot:="{ Component }">
             <transition name="fade" mode="out-in">
                 <component :is="Component"/>
             </transition>
         </router-view>
+        </div>
     </div>
 </template>
 

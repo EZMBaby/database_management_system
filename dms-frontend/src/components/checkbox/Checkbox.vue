@@ -1,32 +1,22 @@
 <script setup lang="ts">
-import {CheckBoxTypes} from "./CheckBoxTypes.js";
-import {PropType} from "vue";
 
 const props = defineProps({
-    label: {
-        type: String,
-        required: true
-    },
-    id: {
-        type: String,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    type: {
-        type: String as PropType<CheckBoxTypes>,
-        default: "checkbox"
-    }
+    data: { type: Array, required: true },
+    prefix: { type: String, default: '' },
+    suffix: { type: String, default: '' },
+    vertical: { type: Boolean, default: false }
 });
 </script>
 
 <template>
-    <label class="container">
-        {{ props.label }}
-        <input :type="props.type" :id="props.id" :name="props.name"/>
-    </label>
+    <div :class="[vertical ? `btn-group-vertical` : `btn-group`]" role="group" aria-label="Basic checkbox toggle button group">
+        <template v-for="singleData in data">
+            <input type="checkbox" class="btn-check" :id="`checkbox_${singleData}`" autocomplete="off">
+            <label class="btn btn-outline-success" :for="`checkbox_${singleData}`">
+                {{ prefix }} {{ singleData }} {{ suffix }}
+            </label>
+        </template>
+    </div>
 </template>
 
 <style scoped>
